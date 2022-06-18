@@ -21,26 +21,29 @@ Target DLL:      CMSIS_AGDI.dll V1.21.12.0
 Dialog DLL:      TCM.DLL V1.14.5.0
  
 <h2>Project:</h2>
-C:\Library\Project\03FWlib-LED\F103.uvprojx
+C:\Library\Doing\Project\03FWlib-LED\F103.uvprojx
 Project File Date:  06/14/2022
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.05 update 2 (build 169)', folder: 'C:\Software\Keil_v5\ARM\ARMCC\Bin'
 Build target 'Templata-REG'
 compiling main.c...
-stm32f10x.h(37): warning:  #1-D: last line of file ends without a newline
-  #define GPIOB ((GPIO_TypeDef *)(GPIOB_BASE))
-main.c(6): warning:  #68-D: integer conversion resulted in a change of sign
-      
-PIOB_CRL &= ~(0x0f)<<(4*0);
-main.c: 2 warnings, 0 errors
+stm32f10x.h(28): warning:  #47-D: incompatible redefinition of macro "RCC_APB2ENR" (declared at line 12)
+  #define RCC_APB2ENR       *(unsigned int*)(RCC_BASE + 0x18)
+main.c(24): warning:  #68-D: integer conversion resulted in a change of sign
+          
+PIOB->CRL &= ~(0x0f)<<(4*5);
+main.c(30): warning:  #68-D: integer conversion resulted in a change of sign
+          
+PIOB->CRL &= ~(0x0f)<<(4*1);
+main.c: 3 warnings, 0 errors
 linking...
-Program Size: Code=372 RO-data=320 RW-data=0 ZI-data=1632  
+Program Size: Code=464 RO-data=320 RW-data=0 ZI-data=1632  
 FromELF: creating hex file...
-".\Objects\Template-REG.axf" - 0 Error(s), 2 Warning(s).
+".\Objects\Template-REG.axf" - 0 Error(s), 3 Warning(s).
 
 <h2>Collection of Component include folders:</h2>
-  C:\Library\Project\03FWlib-LED\RTE
+  C:\Library\Doing\Project\03FWlib-LED\RTE
   C:\Software\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include
 
 <h2>Collection of Component Files used:</h2>
