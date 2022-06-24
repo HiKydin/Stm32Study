@@ -17,3 +17,99 @@
 
 3、开漏输出具有“线与”功能，一个为低，全部为低，多用于I2C、SMBUS总线
 
+### 用固件库编程点亮LED
+
+新建文件bsp_led.c和bsp_led.h
+
+在bsp_led.h中
+
+~~~c
+#ifndef _BSP_LED_H
+#define _BSP_LED_H
+
+#include "stm32f10x.h"
+
+#define LED_GPIO_Pin   GPIO_Pin_0 //宏定义端口引脚
+#define GPIO_Port      GPIOB	  //宏定义GPIO端口
+
+void GPIO_Config(void);           //端口配置函数
+
+#endif
+
+~~~
+
+在bsp_led.c中，实现函数
+
+~~~c
+//bsp : board support package 板级支持包
+#include"bsp_led.h"
+
+void GPIO_Config(void)
+{
+	GPIO_InitTypeDef GPIO_ConfigStruct;//声明结构体
+	
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);//使能时钟
+	
+    //配置时钟
+	GPIO_ConfigStruct.GPIO_Pin = LED_GPIO_Pin;
+	GPIO_ConfigStruct.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_ConfigStruct.GPIO_Speed = GPIO_Speed_10MHz;
+	GPIO_Init(GPIO_Port,&GPIO_ConfigStruct);
+	
+	GPIO_SetBits(GPIO_Port, LED_GPIO_Pin);//位赋值
+	GPIO_ResetBits(GPIO_Port, LED_GPIO_Pin);//位清零
+}
+
+~~~
+
+这样我们就实现了通过固件库编程点亮LED
+
+如果进一步提高可读性，我们可以通过c语言的带参宏定义来实现进一步封装
+
+在bsp_led.h中声明
+
+~~~C
+#ifndef _BSP_LED_H
+#define _BSP_LED_H
+
+#include "stm32f10x.h"
+
+#define LED_GPIO_Pin   GPIO_Pin_0
+#define GPIO_Port      GPIOB
+
+void GPIO_Config(void);
+
+#define ON  1
+#define OFF 0
+
+#define LED_G(i) if(i) GPIO_ResetBits(GPIO_Port, LED_GPIO_Pin); else GPIO_SetBits(GPIO_Port, LED_GPIO_Pin);
+
+#endif
+
+~~~
+
+在bsp_led.c中
+
+~~~c
+//bsp : board support package 板级支持包
+#include"bsp_led.h"
+
+void GPIO_Config(void)
+{
+	GPIO_InitTypeDef GPIO_ConfigStruct;
+	
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE);
+		
+	GPIO_ConfigStruct.GPIO_Pin = LED_GPIO_Pin;
+	GPIO_ConfigStruct.GPIO_Mode = GPIO_Mode_Out_PP;
+	GPIO_ConfigStruct.GPIO_Speed = GPIO_Speed_10MHz;
+	GPIO_Init(GPIO_Port,&GPIO_ConfigStruct);
+	
+	//GPIO_SetBits(GPIO_Port, LED_GPIO_Pin);
+    LED_G(OFF);
+	//GPIO_ResetBits(GPIO_Port, LED_GPIO_Pin);
+    LED_G(ON);
+}
+
+~~~
+
