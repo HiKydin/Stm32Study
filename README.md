@@ -113,3 +113,21 @@ void GPIO_Config(void)
 
 ~~~
 
+### C语言宏定义函数
+
+语法 `#define 函数名 {内容;}`
+
+例如，我们定义一个翻转LED灯亮灭的宏
+
+~~~c
+#define LED_G_TOGGLE {LED_GPIO_Port->ODR ^= LED_GPIO_Pin;}
+~~~
+
+LED_GPIO_Pin是LED绿灯，对应板子的端口就是GPIOB的PB0，15个0和一个1
+
+异或上ODR寄存器当前的值，默认全为0
+
+`^ 与1异或改变 与0异或不变`
+
+所以就会翻转PB0的值，熄灭PB0。（PB0为低电平点亮）
+
